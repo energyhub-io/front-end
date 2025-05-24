@@ -7,6 +7,7 @@ A modern web application for managing Shelly smart devices and monitoring energy
 ## 🚀 Hackathon Project
 
 This project was developed during ETHBratislava 2025, focusing on:
+
 - Smart home energy management
 - Real-time power consumption monitoring
 - IoT device integration
@@ -39,27 +40,32 @@ This project was developed during ETHBratislava 2025, focusing on:
 ### Installation
 
 1. Clone the repository
+
 ```bash
 git clone https://github.com/energyhub-io/shelly-frontend.git
 cd shelly-frontend
 ```
 
 2. Install dependencies
+
 ```bash
 npm install
 ```
 
 3. Configure environment variables
+
 ```bash
 cp .env.example .env.local
 ```
 
 Edit `.env.local`:
+
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:3000
 ```
 
 4. Start the development server
+
 ```bash
 npm run dev
 ```
@@ -70,13 +76,13 @@ Visit `http://localhost:3001` in your browser.
 
 The frontend connects to a NestJS backend service that manages Shelly devices:
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/shelly/devices` | GET | List all devices |
-| `/shelly/devices` | POST | Add new device |
-| `/shelly/devices/{id}/status` | GET | Get device status |
-| `/shelly/devices/{id}/state` | PUT | Toggle device state |
-| `/shelly/devices/{id}` | DELETE | Remove device |
+| Endpoint                      | Method | Description         |
+| ----------------------------- | ------ | ------------------- |
+| `/shelly/devices`             | GET    | List all devices    |
+| `/shelly/devices`             | POST   | Add new device      |
+| `/shelly/devices/{id}/status` | GET    | Get device status   |
+| `/shelly/devices/{id}/state`  | PUT    | Toggle device state |
+| `/shelly/devices/{id}`        | DELETE | Remove device       |
 
 ## Project Structure
 

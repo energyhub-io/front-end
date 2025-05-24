@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { ShellyDevice, SwitchStatus } from '@/types/shelly';
 import { shellyApi } from '@/lib/api';
 import { PowerIcon } from '@heroicons/react/24/solid';
+import Link from 'next/link';
 
 export function DeviceList() {
     const [devices, setDevices] = useState<ShellyDevice[]>([]);
@@ -87,14 +88,21 @@ export function DeviceList() {
                 const status = statuses[device.id];
 
                 return (
-                    <div key={device.id} className="p-4 border rounded-lg shadow">
+                    <Link
+                        href={`/devices/${device.id}`}
+                        key={device.id}
+                        className="block p-4 border rounded-lg shadow bg-white hover:shadow-lg transition-shadow"
+                    >
                         <div className="flex justify-between items-center">
-                            <h3 className="text-lg font-semibold">{device.name}</h3>
+                            <h3 className="text-lg font-semibold text-gray-900">{device.name}</h3>
                             <button
-                                onClick={() => toggleDevice(device.id)}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    toggleDevice(device.id);
+                                }}
                                 className={`p-2 rounded-full ${status?.output
-                                        ? 'bg-green-500 text-white'
-                                        : 'bg-gray-200 text-gray-600'
+                                    ? 'bg-green-500 text-white'
+                                    : 'bg-gray-200 text-gray-600'
                                     }`}
                             >
                                 <PowerIcon className="h-6 w-6" />
@@ -102,12 +110,12 @@ export function DeviceList() {
                         </div>
                         <p className="text-sm text-gray-600">{device.address}</p>
                         {status && (
-                            <div className="mt-2 text-sm">
+                            <div className="mt-2 text-sm text-gray-700">
                                 <p>Power: {formatNumber(status.power)}W</p>
                                 <p>Temperature: {formatNumber(status.temperature)}°C</p>
                             </div>
                         )}
-                    </div>
+                    </Link>
                 );
             })}
         </div>
