@@ -18,7 +18,13 @@ export function AddDeviceForm({ onDeviceAdded }: AddDeviceFormProps) {
         setLoading(true);
 
         try {
-            await shellyApi.addDevice({ name, address, type });
+            await shellyApi.addDevice({
+                name,
+                address,
+                type,
+                contractAddress: "0x70F657164e5b75689b64B7fd1fA275F334f28e18", // Default contract address
+                chargedAmount: 0
+            });
             setName('');
             setAddress('');
             setType('PLUG');

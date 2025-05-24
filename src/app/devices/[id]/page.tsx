@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { ShellyDevice, SwitchStatus } from '@/types/shelly';
+import { ShellyDevice, SwitchStatus, MetricPoint } from '@/types/shelly';
 import { shellyApi } from '@/lib/api';
 import { PowerIcon, ArrowLeftIcon } from '@heroicons/react/24/solid';
+import { DeviceMetricsChart } from '@/components/device/DeviceMetricsChart';
+import { shortenAddress } from '@/lib/utils';
 
 export default function DeviceDetailPage() {
     const params = useParams();
@@ -12,6 +14,7 @@ export default function DeviceDetailPage() {
     const [device, setDevice] = useState<ShellyDevice | null>(null);
     const [status, setStatus] = useState<SwitchStatus | null>(null);
     const [loading, setLoading] = useState(true);
+    const [metrics, setMetrics] = useState<MetricPoint[]>([]);
 
     useEffect(() => {
         const loadDevice = async () => {
@@ -44,6 +47,39 @@ export default function DeviceDetailPage() {
 
         return () => clearInterval(intervalId);
     }, [params.id, device]);
+
+    useEffect(() => {
+        if (!device) return;
+
+        // Add new data point every 5 seconds
+        const addMetricPoint = (status: SwitchStatus) => {
+            setMetrics(prev => {
+                const newPoint = {
+                    timestamp: new Date(),
+                    power: parseFloat(status.power?.toString() || '0'),
+                    temperature: parseFloat(status.temperature?.toString() || '0'),
+                };
+                
+                // Keep last hour of data (720 points at 5-second intervals)
+                const newMetrics = [...prev, newPoint].slice(-720);
+                return newMetrics;
+            });
+        };
+
+        // Add initial point
+        if (status) {
+            addMetricPoint(status);
+        }
+
+        // Set up periodic updates
+        const intervalId = setInterval(() => {
+            if (status) {
+                addMetricPoint(status);
+            }
+        }, 5000);
+
+        return () => clearInterval(intervalId);
+    }, [device, status]);
 
     const toggleDevice = async () => {
         if (!device || !status) return;
@@ -117,12 +153,37 @@ export default function DeviceDetailPage() {
                     </div>
                 )}
 
-                {/* Placeholder for future energy consumption chart */}
+                {status && device.contractAddress && (
+                    <>
+                        <div className="mt-6 grid grid-cols-2 gap-6">
+                            <div className="bg-gray-50 rounded-lg p-4">
+                                <p className="text-sm text-gray-600">Smart Contract</p>
+                                <p className="text-lg font-medium text-gray-900 font-mono">
+                                    {shortenAddress(device.contractAddress)}
+                                </p>
+                                <a 
+                                    href={`https://etherscan.io/address/${device.contractAddress}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-sm text-blue-600 hover:text-blue-800"
+                                >
+                                    View on Etherscan
+                                </a>
+                            </div>
+                            <div className="bg-gray-50 rounded-lg p-4">
+                                <p className="text-sm text-gray-600">Total Charged</p>
+                                <p className="text-2xl font-semibold text-gray-900">
+                                    {device.chargedAmount?.toFixed(2) || '0.00'} USDC
+                                </p>
+                            </div>
+                        </div>
+                    </>
+                )}
+
+                {/* Replace the placeholder with actual chart */}
                 <div className="mt-8">
                     <h2 className="text-xl font-semibold mb-4 text-gray-900">Energy Consumption History</h2>
-                    <div className="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
-                        <p className="text-gray-500">Energy consumption chart coming soon</p>
-                    </div>
+                    <DeviceMetricsChart data={metrics} />
                 </div>
             </div>
         </div>

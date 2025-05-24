@@ -110,3 +110,7 @@ src/
 ## License
 
 MIT License - see LICENSE file for details
+
+## Similar Projects
+
+Worth checking out [Combinder](https://www.combinder.io/) - another innovative project in the DePIN (Decentralized Physical Infrastructure Network) space focusing on household device energy management.
