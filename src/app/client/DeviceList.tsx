@@ -7,6 +7,7 @@ import { PowerIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { ethers } from "ethers";
 import abi from "./abi.json";
+import erc20abi from "./erc20_abi.json";
 
 export function DeviceList() {
   const [devices, setDevices] = useState<ShellyDevice[]>([]);
@@ -54,6 +55,7 @@ export function DeviceList() {
   const [provider, setProvider] = useState(null);
   const [signer, setSigner] = useState(null);
   const [contract, setContract] = useState(null);
+  const [erc20contract, seterc20contract] = useState(null);
   useEffect(() => {
     const initializeProvider = async () => {
       if (window.ethereum) {
@@ -67,9 +69,22 @@ export function DeviceList() {
         const signer = provider.getSigner(walletAddress);
         setSigner(signer);
 
-        const contractAddress = "0xDAF33c26E3D62C912f0eF3ab1a1101e98Aa1F2D2";
+        const contractAddress = "0x60a863a9286fdd5a070865d620930084b04c8afb";
         const contract = new ethers.Contract(contractAddress, abi, signer);
         setContract(contract);
+
+        const erc20contractAddress =
+          "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238";
+        const erc20 = new ethers.Contract(
+          erc20contractAddress,
+          erc20abi,
+          signer
+        );
+        seterc20contract(erc20);
+
+        const amount = ethers.utils.parseUnits("1000", 18); // Approving 1000 tokens, adjust as needed
+        const tx = await erc20.approve(contractAddress, amount);
+        await tx.wait();
       }
     };
 
