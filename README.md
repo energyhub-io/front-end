@@ -1,8 +1,18 @@
 # EnergyHub - Smart Energy Management Platform
 
-A modern web application for managing Shelly smart devices and monitoring energy consumption in real-time.
+> 🏆 Built during ETHBratislava 2025 Hackathon
 
-## Features
+A modern web application for managing Shelly smart devices and monitoring energy consumption in real-time. The project aims to make energy consumption monitoring and smart device management more accessible and efficient.
+
+## 🚀 Hackathon Project
+
+This project was developed during ETHBratislava 2025, focusing on:
+- Smart home energy management
+- Real-time power consumption monitoring
+- IoT device integration
+- User-friendly interface for device control
+
+## ✨ Features
 
 - 🔌 Real-time device monitoring
 - ⚡ Power consumption tracking
