@@ -1,36 +1,96 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# EnergyHub - Smart Energy Management Platform
+
+A modern web application for managing Shelly smart devices and monitoring energy consumption in real-time.
+
+## Features
+
+- 🔌 Real-time device monitoring
+- ⚡ Power consumption tracking
+- 🌡️ Temperature monitoring
+- 🎮 Device power state control
+- 🔄 Automatic status updates (5s interval)
+- 📱 Responsive design
+
+## Tech Stack
+
+- **Frontend**: Next.js 15, React 19, TypeScript
+- **Styling**: Tailwind CSS
+- **HTTP Client**: Axios
+- **Icons**: Heroicons
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
+- Node.js 18+
+- npm/yarn
+- Running Shelly backend service
+
+### Installation
+
+1. Clone the repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/energyhub-io/shelly-frontend.git
+cd shelly-frontend
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Configure environment variables
+```bash
+cp .env.example .env.local
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Edit `.env.local`:
+```env
+NEXT_PUBLIC_API_URL=http://localhost:3000
+```
 
-## Learn More
+4. Start the development server
+```bash
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Visit `http://localhost:3001` in your browser.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## API Integration
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The frontend connects to a NestJS backend service that manages Shelly devices:
 
-## Deploy on Vercel
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/shelly/devices` | GET | List all devices |
+| `/shelly/devices` | POST | Add new device |
+| `/shelly/devices/{id}/status` | GET | Get device status |
+| `/shelly/devices/{id}/state` | PUT | Toggle device state |
+| `/shelly/devices/{id}` | DELETE | Remove device |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Project Structure
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+src/
+├── components/         # React components
+│   ├── DeviceList.tsx # Main device management
+│   └── AddDeviceForm.tsx
+├── lib/               # Utilities and services
+│   ├── api.ts        # API client
+│   └── api-error.ts  # Error handling
+├── types/             # TypeScript definitions
+│   └── shelly.ts
+└── app/              # Next.js app router pages
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+MIT License - see LICENSE file for details
