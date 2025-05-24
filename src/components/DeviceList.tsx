@@ -28,13 +28,17 @@ export function DeviceList() {
     const loadDevices = async () => {
         try {
             const devices = await shellyApi.getDevices();
+            const contractAddresses = [
+                "0x40B1E4993f69256D9d629C1846E7859a4Bb1c64B",
+                "0x60a863a9286fdd5a070865d620930084b04c8afb"
+            ];
+            
             // Add hardcoded contract addresses and amounts
-            const devicesWithContracts = devices.map((device, index) => ({
+            const devicesWithContracts = devices.map(device => ({
                 ...device,
-                contractAddress: index === 0 
-                    ? "0x60a863a9286fdd5a070865d620930084b04c8afb"  // First device
-                    : "0x70F657164e5b75689b64B7fd1fA275F334f28e18", // Other devices
-                chargedAmount: index === 0 ? 156.45 : 89.30 // Hardcoded amounts
+                // Randomly pick one of the two addresses
+                contractAddress: contractAddresses[Math.floor(Math.random() * 2)],
+                chargedAmount: Math.random() > 0.5 ? 156.45 : 89.30 // Random amount between the two values
             }));
             setDevices(devicesWithContracts);
             await updateDeviceStatuses(devices);

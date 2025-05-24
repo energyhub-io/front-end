@@ -13,6 +13,11 @@ export function AddDeviceForm({ onDeviceAdded }: AddDeviceFormProps) {
     const [type, setType] = useState<'PLUG' | 'OTHER'>('PLUG');
     const [loading, setLoading] = useState(false);
 
+    const contractAddresses = [
+        "0x40B1E4993f69256D9d629C1846E7859a4Bb1c64B",
+        "0x60a863a9286fdd5a070865d620930084b04c8afb"
+    ];
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
@@ -22,7 +27,7 @@ export function AddDeviceForm({ onDeviceAdded }: AddDeviceFormProps) {
                 name,
                 address,
                 type,
-                contractAddress: "0x70F657164e5b75689b64B7fd1fA275F334f28e18", // Default contract address
+                contractAddress: contractAddresses[Math.floor(Math.random() * 2)],
                 chargedAmount: 0
             });
             setName('');
